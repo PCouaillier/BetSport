@@ -1,12 +1,272 @@
-*.class
+Last login: Thu Jul  7 11:22:02 on ttys000
+ %                                                                              ➜  ~ cd Projects
+➜  Projects cd BetSport
+➜  BetSport ls
+WebContent build      pom.xml    src        target
+➜  BetSport git init
+Initialized empty Git repository in /Users/paulcouaillier/Projects/BetSport/.git/
+➜  BetSport git:(master) ✗ git remote add origin https://github.com/PCouaillier/BetSport.git
+➜  BetSport git:(master) ✗ git remote -v
+origin  https://github.com/PCouaillier/BetSport.git (fetch)
+origin  https://github.com/PCouaillier/BetSport.git (push)
+➜  BetSport git:(master) ✗ git pull
+remote: Counting objects: 4, done.
+remote: Compressing objects: 100% (4/4), done.
+remote: Total 4 (delta 0), reused 0 (delta 0), pack-reused 0
+Unpacking objects: 100% (4/4), done.
+From https://github.com/PCouaillier/BetSport
+ * [new branch]      master     -> origin/master
+There is no tracking information for the current branch.
+Please specify which branch you want to merge with.
+See git-pull(1) for details.
+# Directories #
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+    git pull <remote> <branch>
+
+If you wish to set tracking information for this branch you can do so with:
+
+    git branch --set-upstream-to=origin/<branch> master
+
+➜  BetSport git:(master) ✗ git pull origin master
+From https://github.com/PCouaillier/BetSport
+ * branch            master     -> FETCH_HEAD
+➜  BetSport git:(master) ✗ ls
+LICENSE    WebContent build      pom.xml    src        target
+➜  BetSport git:(master) ✗ ls -l
+total 16
+-rw-r--r--  1 paulcouaillier  staff  1082  7 jul 13:05 LICENSE
+drwxr-xr-x  8 paulcouaillier  staff   272  7 jul 10:48 WebContent
+drwxr-xr-x  3 paulcouaillier  staff   102  7 jul 10:18 build
+-rw-r--r--  1 paulcouaillier  staff  1445  7 jul 11:08 pom.xml
+drwxr-xr-x  3 paulcouaillier  staff   102  7 jul 10:29 src
+drwxr-xr-x  5 paulcouaillier  staff   170  7 jul 10:21 target
+➜  BetSport git:(master) ✗ ls
+LICENSE    WebContent build      pom.xml    src        target
+➜  BetSport git:(master) ✗ touch .gitignore
+➜  BetSport git:(master) ✗ vi .gitignore
+➜  BetSport git:(master) ✗ git checkout -b develop
+M   .gitignore
+Switched to a new branch 'develop'
+➜  BetSport git:(develop) ✗ git commit -m "add project to github (all needs are tagged with todo)"
+On branch develop
+Changes not staged for commit:
+    modified:   .gitignore
+
+Untracked files:
+    WebContent/
+    pom.xml
+    src/
+
+no changes added to commit
+➜  BetSport git:(develop) ✗ git add -A .
+➜  BetSport git:(develop) ✗ git commit -m "add project to github (all needs are tagged with todo)"
+➜  BetSport git:(develop) ✗ git status
+On branch develop
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+    modified:   .gitignore
+    new file:   WebContent/META-INF/MANIFEST.MF
+    new file:   WebContent/css/bootstrap-theme.css
+    new file:   WebContent/css/bootstrap-theme.css.map
+    new file:   WebContent/css/bootstrap-theme.min.css
+    new file:   WebContent/css/bootstrap-theme.min.css.map
+    new file:   WebContent/css/bootstrap.css
+    new file:   WebContent/css/bootstrap.css.map
+    new file:   WebContent/css/bootstrap.min.css
+    new file:   WebContent/css/bootstrap.min.css.map
+    new file:   WebContent/css/main.css
+    new file:   WebContent/image/background.jpg
+    new file:   WebContent/image/baniere.jpg
+    new file:   WebContent/index.jsp
+    new file:   WebContent/js/bootstrap.js
+    new file:   WebContent/js/bootstrap.min.js
+    new file:   WebContent/js/jquery-2.2.3.min.js
+    new file:   WebContent/js/main.js
+    new file:   WebContent/js/npm.js
+    new file:   pom.xml
+    new file:   src/fr/borecouaillierjollanwoets/betsport/entitymanager/BetEntityManager.java
+    new file:   src/fr/borecouaillierjollanwoets/betsport/entitymanager/MatchEntityManager.java
+    new file:   src/fr/borecouaillierjollanwoets/betsport/entitymanager/TeamEntityManager.java
+    new file:   src/fr/borecouaillierjollanwoets/betsport/entitymanager/UserEntityManager.java
+    new file:   src/fr/borecouaillierjollanwoets/betsport/model/Bet.java
+    new file:   src/fr/borecouaillierjollanwoets/betsport/model/Match.java
+    new file:   src/fr/borecouaillierjollanwoets/betsport/model/Team.java
+    new file:   src/fr/borecouaillierjollanwoets/betsport/model/User.java
+    new file:   src/fr/borecouaillierjollanwoets/betsport/tools/JSONLoader.java
+    new file:   src/fr/espi/borecouaillierjollanwoets/betsport/servlet/BetServlet.java
+    new file:   src/fr/espi/borecouaillierjollanwoets/betsport/servlet/IndexServlet.java
+    new file:   src/fr/espi/borecouaillierjollanwoets/betsport/servlet/LeaderBoardServlet.java
+    new file:   src/fr/espi/borecouaillierjollanwoets/betsport/servlet/LoginServlet.java
+    new file:   src/fr/espi/borecouaillierjollanwoets/betsport/servlet/MatchServlet.java
+    new file:   src/fr/espi/borecouaillierjollanwoets/betsport/servlet/TeamServlet.java
+    new file:   src/fr/espi/borecouaillierjollanwoets/betsport/servlet/UserServlet.java
+    new file:   src/fr/paulcouaillier/tools/db/DBHelper.java
+    new file:   src/fr/paulcouaillier/tools/db/EntityManager.java
+    new file:   src/fr/paulcouaillier/tools/db/EntityManagerStatement.java
+    new file:   src/fr/paulcouaillier/tools/db/ForeignKey.java
+    new file:   src/fr/paulcouaillier/tools/db/JoinOneToMany.java
+    new file:   src/fr/paulcouaillier/tools/db/Model.java
+    new file:   src/fr/paulcouaillier/tools/db/ModelId.java
+
+➜  BetSport git:(develop) ✗ open .
+➜  BetSport git:(develop) ✗ git add -A .
+➜  BetSport git:(develop) ✗ git add .gitignore
+➜  BetSport git:(develop) ✗ git commit -m "add project to github (all needs are tagged with todo)"
+[develop 9b7eb75] add project to github (all needs are tagged with todo)
+ 43 files changed, 11943 insertions(+), 12 deletions(-)
+ rewrite .gitignore (76%)
+ create mode 100644 WebContent/META-INF/MANIFEST.MF
+ create mode 100644 WebContent/css/bootstrap-theme.css
+ create mode 100644 WebContent/css/bootstrap-theme.css.map
+ create mode 100644 WebContent/css/bootstrap-theme.min.css
+ create mode 100644 WebContent/css/bootstrap-theme.min.css.map
+ create mode 100644 WebContent/css/bootstrap.css
+ create mode 100644 WebContent/css/bootstrap.css.map
+ create mode 100644 WebContent/css/bootstrap.min.css
+ create mode 100644 WebContent/css/bootstrap.min.css.map
+ create mode 100644 WebContent/css/main.css
+ create mode 100644 WebContent/image/background.jpg
+ create mode 100644 WebContent/image/baniere.jpg
+ create mode 100644 WebContent/index.jsp
+ create mode 100644 WebContent/js/bootstrap.js
+ create mode 100644 WebContent/js/bootstrap.min.js
+ create mode 100644 WebContent/js/jquery-2.2.3.min.js
+ create mode 100644 WebContent/js/main.js
+ create mode 100644 WebContent/js/npm.js
+ create mode 100644 pom.xml
+ create mode 100644 src/fr/borecouaillierjollanwoets/betsport/entitymanager/BetEntityManager.java
+ create mode 100644 src/fr/borecouaillierjollanwoets/betsport/entitymanager/MatchEntityManager.java
+ create mode 100644 src/fr/borecouaillierjollanwoets/betsport/entitymanager/TeamEntityManager.java
+ create mode 100644 src/fr/borecouaillierjollanwoets/betsport/entitymanager/UserEntityManager.java
+ create mode 100644 src/fr/borecouaillierjollanwoets/betsport/model/Bet.java
+ create mode 100644 src/fr/borecouaillierjollanwoets/betsport/model/Match.java
+ create mode 100644 src/fr/borecouaillierjollanwoets/betsport/model/Team.java
+ create mode 100644 src/fr/borecouaillierjollanwoets/betsport/model/User.java
+ create mode 100644 src/fr/borecouaillierjollanwoets/betsport/tools/JSONLoader.java
+ create mode 100644 src/fr/espi/borecouaillierjollanwoets/betsport/servlet/BetServlet.java
+ create mode 100644 src/fr/espi/borecouaillierjollanwoets/betsport/servlet/IndexServlet.java
+ create mode 100644 src/fr/espi/borecouaillierjollanwoets/betsport/servlet/LeaderBoardServlet.java
+ create mode 100644 src/fr/espi/borecouaillierjollanwoets/betsport/servlet/LoginServlet.java
+ create mode 100644 src/fr/espi/borecouaillierjollanwoets/betsport/servlet/MatchServlet.java
+ create mode 100644 src/fr/espi/borecouaillierjollanwoets/betsport/servlet/TeamServlet.java
+ create mode 100644 src/fr/espi/borecouaillierjollanwoets/betsport/servlet/UserServlet.java
+ create mode 100644 src/fr/paulcouaillier/tools/db/DBHelper.java
+ create mode 100644 src/fr/paulcouaillier/tools/db/EntityManager.java
+ create mode 100644 src/fr/paulcouaillier/tools/db/EntityManagerStatement.java
+ create mode 100644 src/fr/paulcouaillier/tools/db/ForeignKey.java
+ create mode 100644 src/fr/paulcouaillier/tools/db/JoinOneToMany.java
+ create mode 100644 src/fr/paulcouaillier/tools/db/Model.java
+ create mode 100644 src/fr/paulcouaillier/tools/db/ModelId.java
+➜  BetSport git:(develop) git push
+Everything up-to-date
+➜  BetSport git:(develop) git pull
+There is no tracking information for the current branch.
+Please specify which branch you want to merge with.
+See git-pull(1) for details.
+
+    git pull <remote> <branch>
+
+If you wish to set tracking information for this branch you can do so with:
+
+    git branch --set-upstream-to=origin/<branch> develop
+
+➜  BetSport git:(develop) git branch --set-upstream-to=origin/develop develop
+error: the requested upstream branch 'origin/develop' does not exist
+hint:
+hint: If you are planning on basing your work on an upstream
+hint: branch that already exists at the remote, you may need to
+hint: run "git fetch" to retrieve it.
+hint:
+hint: If you are planning to push out a new local branch that
+hint: will track its remote counterpart, you may want to use
+hint: "git push -u" to set the upstream config as you push.
+➜  BetSport git:(develop) git branch --set-upstream-to=origin/master master
+Branch master set up to track remote branch master from origin.
+➜  BetSport git:(develop) git push
+Everything up-to-date
+➜  BetSport git:(develop) git checkout master
+Switched to branch 'master'
+Your branch is up-to-date with 'origin/master'.
+➜  BetSport git:(master) ✗ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+    .classpath
+    .project
+    .settings/
+    target/
+
+nothing added to commit but untracked files present (use "git add" to track)
+➜  BetSport git:(master) ✗ git add -A .
+➜  BetSport git:(master) ✗ git rm -r target
+error: the following files have changes staged in the index:
+    target/m2e-wtp/web-resources/META-INF/MANIFEST.MF
+    target/m2e-wtp/web-resources/META-INF/maven/BetSport/BetSport/pom.properties
+    target/m2e-wtp/web-resources/META-INF/maven/BetSport/BetSport/pom.xml
+(use --cached to keep the file, or -f to force removal)
+➜  BetSport git:(master) ✗ git rm -r .setting
+fatal: pathspec '.setting' did not match any files
+➜  BetSport git:(master) ✗ git rm -r .settings
+error: the following files have changes staged in the index:
+    .settings/.jsdtscope
+    .settings/org.eclipse.jdt.core.prefs
+    .settings/org.eclipse.m2e.core.prefs
+    .settings/org.eclipse.wst.common.component
+    .settings/org.eclipse.wst.common.project.facet.core.xml
+    .settings/org.eclipse.wst.jsdt.ui.superType.container
+    .settings/org.eclipse.wst.jsdt.ui.superType.name
+    .settings/org.eclipse.wst.validation.prefs
+(use --cached to keep the file, or -f to force removal)
+➜  BetSport git:(master) ✗ git rm -r .projects
+fatal: pathspec '.projects' did not match any files
+➜  BetSport git:(master) ✗ git rm -r .project
+error: the following file has changes staged in the index:
+    .project
+(use --cached to keep the file, or -f to force removal)
+➜  BetSport git:(master) ✗ git rm -r .classpath
+error: the following file has changes staged in the index:
+    .classpath
+(use --cached to keep the file, or -f to force removal)
+➜  BetSport git:(master) ✗ git commit -m "add project to github (all needs are tagged with todo)"
+[master 1466b17] add project to github (all needs are tagged with todo)
+ 13 files changed, 172 insertions(+)
+ create mode 100644 .classpath
+ create mode 100644 .project
+ create mode 100644 .settings/.jsdtscope
+ create mode 100644 .settings/org.eclipse.jdt.core.prefs
+ create mode 100644 .settings/org.eclipse.m2e.core.prefs
+ create mode 100644 .settings/org.eclipse.wst.common.component
+ create mode 100644 .settings/org.eclipse.wst.common.project.facet.core.xml
+ create mode 100644 .settings/org.eclipse.wst.jsdt.ui.superType.container
+ create mode 100644 .settings/org.eclipse.wst.jsdt.ui.superType.name
+ create mode 100644 .settings/org.eclipse.wst.validation.prefs
+ create mode 100644 target/m2e-wtp/web-resources/META-INF/MANIFEST.MF
+ create mode 100644 target/m2e-wtp/web-resources/META-INF/maven/BetSport/BetSport/pom.properties
+# Directories #
+/build/
+/bin/
+target/
+
+# OS Files #
+.DS_Store
+
+*.class
 
 # Package Files #
 *.jar
 *.war
 *.ear
+*.db
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+######################
+# Windows
+######################
+
+# Windows image file caches
+Thumbs.db
+
+# Folder config file
+".gitignore" 71L, 796C
