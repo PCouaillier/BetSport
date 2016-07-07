@@ -1,11 +1,14 @@
 package fr.borecouaillierjollanwoets.betsport.model;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.json.JSONObject;
 import org.json.JSONString;
 
+import fr.paulcouaillier.tools.db.DBHelper;
 import fr.paulcouaillier.tools.db.ForeignKey;
 import fr.paulcouaillier.tools.db.Model;
 
@@ -28,6 +31,10 @@ public class Match extends Model implements JSONString {
 	private Double teamTwoQuote;
 	
 	private boolean betLocked = true;
+	
+	private Date matchDate;
+	
+	protected final DBHelper.TABLES TABLE = DBHelper.TABLES.TABLE_MATCH;
 
 	public Match() {
 	}
@@ -121,32 +128,43 @@ public class Match extends Model implements JSONString {
 
 	@Override
 	public void setterPreparedStatementResultSet(ResultSet resultSet) {
-		String[] s = new String[6];
-		try {this.id 			= resultSet.getInt("id");			  			} catch (SQLException sqlException) {s[0] = sqlException.getMessage();}
-		try {this.teamOne 		= new ForeignKey<>(resultSet.getInt("teamOne"));} catch (SQLException sqlException) {s[1] = sqlException.getMessage();}
-		try {this.teamTwo 	=	 new ForeignKey<>(resultSet.getInt("teamTwo"));	} catch (SQLException sqlException) {s[2] = sqlException.getMessage();}
-		try {this.scoreTeamOne 	= resultSet.getInt("scoreTeamOne"); 			} catch (SQLException sqlException) {s[3] = sqlException.getMessage();}
-		try {this.scoreTeamTwo 	= resultSet.getInt("scoreTeamTwo");				} catch (SQLException sqlException) {s[4] = sqlException.getMessage();}
-		try {this.teamOneQuote 	= resultSet.getDouble("teamOneQuote");			} catch (SQLException sqlException) {s[5] = sqlException.getMessage();}
-		try {this.teamTwoQuote 	= resultSet.getDouble("teamTwoQuote");			} catch (SQLException sqlException) {s[6] = sqlException.getMessage();}
+		try {this.id 			= resultSet.getInt("id");			  			} catch (SQLException sqlException) {sqlException.printStackTrace();}
+		try {this.teamOne 		= new ForeignKey<>(resultSet.getInt("teamOne"));} catch (SQLException sqlException) {sqlException.printStackTrace();}
+		try {this.teamTwo 	=	 new ForeignKey<>(resultSet.getInt("teamTwo"));	} catch (SQLException sqlException) {sqlException.printStackTrace();}
+		try {this.scoreTeamOne 	= resultSet.getInt("scoreTeamOne"); 			} catch (SQLException sqlException) {sqlException.printStackTrace();}
+		try {this.scoreTeamTwo 	= resultSet.getInt("scoreTeamTwo");				} catch (SQLException sqlException) {sqlException.printStackTrace();}
+		try {this.teamOneQuote 	= resultSet.getDouble("teamOneQuote");			} catch (SQLException sqlException) {sqlException.printStackTrace();}
+		try {this.teamTwoQuote 	= resultSet.getDouble("teamTwoQuote");			} catch (SQLException sqlException) {sqlException.printStackTrace();}
+		try {this.matchDate 	= resultSet.getDate("matchDate");				} catch (SQLException sqlException) {sqlException.printStackTrace();}
 	}
 
 	@Override
 	public void setterPreparedStatement(PreparedStatement preparedStatement) {
-		String[] s = new String[6];
-		try {preparedStatement.setInt(1, this.id);				} catch (SQLException sqlException) {s[0] = sqlException.getMessage();}
-		try {preparedStatement.setInt(2, this.teamOne.getId());	} catch (SQLException sqlException) {s[1] = sqlException.getMessage();}
-		try {preparedStatement.setInt(3, this.teamTwo.getId());	} catch (SQLException sqlException) {s[2] = sqlException.getMessage();}
-		try {preparedStatement.setInt(4, this.scoreTeamOne);	} catch (SQLException sqlException) {s[3] = sqlException.getMessage();}
-		try {preparedStatement.setInt(5, this.scoreTeamTwo);	} catch (SQLException sqlException) {s[4] = sqlException.getMessage();}
-		try {preparedStatement.setDouble(6, this.teamOneQuote);	} catch (SQLException sqlException) {s[5] = sqlException.getMessage();}
-		try {preparedStatement.setDouble(7, this.teamTwoQuote);	} catch (SQLException sqlException) {s[6] = sqlException.getMessage();}
+		try {preparedStatement.setInt(1, this.id);				} catch (SQLException sqlException) {sqlException.printStackTrace();}
+		try {preparedStatement.setInt(2, this.teamOne.getId());	} catch (SQLException sqlException) {sqlException.printStackTrace();}
+		try {preparedStatement.setInt(3, this.teamTwo.getId());	} catch (SQLException sqlException) {sqlException.printStackTrace();}
+		try {preparedStatement.setInt(4, this.scoreTeamOne);	} catch (SQLException sqlException) {sqlException.printStackTrace();}
+		try {preparedStatement.setInt(5, this.scoreTeamTwo);	} catch (SQLException sqlException) {sqlException.printStackTrace();}
+		try {preparedStatement.setDouble(6, this.teamOneQuote);	} catch (SQLException sqlException) {sqlException.printStackTrace();}
+		try {preparedStatement.setDouble(7, this.teamTwoQuote);	} catch (SQLException sqlException) {sqlException.printStackTrace();}
+		try {preparedStatement.setDate(8, this.matchDate);		} catch (SQLException sqlException) {sqlException.printStackTrace();}
 	}
 
 	@Override
-	public String toJSONString() {
-		// TODO complete JSON 
-		return "{\"id\"="+this.id+",\"teamOne\"="+this.teamOne.get().toJSONString()+",\"teamTwo\"="+this.teamTwo.get().toJSONString()+",\"winner\"="+this.winner.get().toJSONString()+"}";
+	public String toJSONString() { 
+		return this.toJSON().toString();
+	}
+
+	public JSONObject toJSON() {
+		return (new JSONObject())
+				.append("id", 			this.id)
+				.append("teamOne", 		this.teamOne.get().toJSON())
+				.append("teamTwo", 		this.teamTwo.get().toJSON())
+				.append("scoreTeamOne", this.scoreTeamOne)
+				.append("scoreTeamTwo", this.scoreTeamTwo)
+				.append("teamOneQuote", this.teamOneQuote)
+				.append("teamTwoQuote", this.teamTwoQuote)
+				.append("matchDate", 	this.matchDate);
 	}
 	
 }

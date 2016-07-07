@@ -9,24 +9,64 @@ import java.sql.PreparedStatement;
 
 public class DBHelper {
 	
-	// TODO configure database connection
+
 	public static final String DRIVER = "org.postgresql.Driver";
 	public static final String DB_NAME= "";
 	public static final String DB_DEFAULT_USER_NAME= "";
 	public static final String DB_DEFAULT_USER_PASSWORD= "";
 	public static final String CONNECTION = "jdbc:postgresql://localhost/"+DB_NAME;
 
-	// TODO complete table
+
 	public static enum TABLES {
-		TABLE_USER("User", new String[]{
-				"id"
-		}, new String[]{
-				"UUID"
-		}),
 		TABLE_BET("Bet", new String[]{
-				"id"
+				"id",
+				"winner",
+				"scoreTeamOne",
+				"scoreTeamTwo",
+				"isWinnerCorrect",
+				"isScoreCorrect",
+				"betPoints"
+		}, new String[]{
+				"UUID",
+				"UUID",
+				"Integer",
+				"Integer",
+				"boolean",
+				"boolean",
+				"betPoints"
+		}),
+		TABLE_MATCH("Match", new String[]{
+				"id",
+				"teamOne",
+				"teamTwo",
+				"teamOneQuote",
+				"teamTwoQuote",
+				"betLocked"
 		}, new String[] {
-				"UUID"
+				"UUID",
+				"UUID",
+				"UUID",
+				"Integer",
+				"Integer",
+				"boolean"
+		}),
+		TABLE_TEAM("Team", new String[]{
+				"id",
+				"name"
+		}, new String[] {
+				"UUID",
+				"Varchar(255)"
+		}),
+		TABLE_USER("User", new String[]{
+				"id",
+				"firstName",
+				"lastName",
+				"email"
+		}, new String[]{
+				"UUID",
+				"Varchar(255)",
+				"Varchar(255)",
+				"Varchar(255)"
 		});
 
 		public final String TABLE_NAME;
@@ -48,7 +88,6 @@ public class DBHelper {
 	
 	
 	/**
-	 * TODO change Interface type
 	 * @param database
 	 * @throws SQLException 
 	 * @throws ClassNotFoundException 
@@ -60,8 +99,10 @@ public class DBHelper {
         for(TABLES table : TABLES.values()) {
 
             query = "CREATE TABLE "
-                    + table.TABLE_NAME + "(_id"
-                    + " integer primary key autoincrement";
+                    + table.TABLE_NAME + "(_id";
+            if(table.COLUMNS_TYPE[0] != "UUID") {
+                    query = query + " integer primary key autoincrement";
+            }
             for(int i=1; i < table.COLUMNS_NAME.length;i++) {
                 query += "," + table.COLUMNS_NAME[i] + " " + table.COLUMNS_TYPE[i] + " NOT NULL";
             }

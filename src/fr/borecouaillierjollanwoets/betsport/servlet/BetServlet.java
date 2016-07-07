@@ -1,4 +1,4 @@
-package fr.espi.borecouaillierjollanwoets.betsport.servlet;
+package fr.borecouaillierjollanwoets.betsport.servlet;
 
 import java.io.IOException;
 import javax.servlet.ServletException;

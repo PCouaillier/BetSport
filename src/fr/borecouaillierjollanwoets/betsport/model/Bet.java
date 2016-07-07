@@ -6,28 +6,32 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.json.JSONObject;
 import org.json.JSONString;
 
+import fr.paulcouaillier.tools.db.DBHelper;
 import fr.paulcouaillier.tools.db.ForeignKey;
 
 public class Bet extends Model implements JSONString {
-	
+
 	// protected Integer id;
-	
+
 	private ForeignKey<Match> match;
 
 	private ForeignKey<Team> winner; 
-	
+
 	private Integer scoreTeamOne;
-	
+
 	private Integer scoreTeamTwo;
-	
+
 	private Boolean isWinnerCorrect = null;
 
 	private Boolean isScoreCorrect = null;
-	
+
 	private Integer betPoints = null;
-	
+
+	protected final DBHelper.TABLES TABLE = DBHelper.TABLES.TABLE_BET;
+
 	/**
 	 * foreign key
 	 */
@@ -136,9 +140,25 @@ public class Bet extends Model implements JSONString {
 	public void setterPreparedStatement(PreparedStatement preparedStatement) {
 		try {
 			preparedStatement.setInt(1, this.id);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
 			preparedStatement.setInt(2, this.match.getId());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
 			preparedStatement.setBoolean(3, this.isScoreCorrect);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
 			preparedStatement.setBoolean(4, this.isWinnerCorrect);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
 			preparedStatement.setInt(5, this.doneByUser.getId());
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -147,19 +167,26 @@ public class Bet extends Model implements JSONString {
 	
 	@Override
 	public void setterPreparedStatementResultSet(ResultSet resultSet) {
-		if(!(
-			this.errorCatcher(resultSet, rS -> {this.id = rS.getInt("id");})
-			& this.errorCatcher(resultSet, rS -> {this.match = new ForeignKey<Match>(resultSet.getInt("match"));})
-			& this.errorCatcher(resultSet, rS -> {this.isScoreCorrect = resultSet.getBoolean("is_score_correct");})
-			& this.errorCatcher(resultSet, rS -> {this.isWinnerCorrect = resultSet.getBoolean("is_winner_correct");})
-			& this.errorCatcher(resultSet, rS -> {this.doneByUser = new ForeignKey<>(resultSet.getInt("user"));})
-		)) {
-			// TODO complete this
-		}
+		
+		this.errorCatcher(resultSet, rS -> {this.id = rS.getInt("id");});
+		this.errorCatcher(resultSet, rS -> {this.match = new ForeignKey<Match>(resultSet.getInt("match"));});
+		this.errorCatcher(resultSet, rS -> {this.isScoreCorrect = resultSet.getBoolean("is_score_correct");});
+		this.errorCatcher(resultSet, rS -> {this.isWinnerCorrect = resultSet.getBoolean("is_winner_correct");});
+		this.errorCatcher(resultSet, rS -> {this.doneByUser = new ForeignKey<>(resultSet.getInt("user"));});
+	}
+	
+	public JSONObject toJSON() {
+		return (new JSONObject())
+				.append("id", this.id)
+				.append("match", this.match.get().toJSON())
+				.append("winner", this.winner.get().toJSON())
+				.append("scoreTeamOne", this.scoreTeamOne)
+				.append("scoreTeamTwo", this.scoreTeamTwo)
+				.append("isWinnerCorrect", this.isWinnerCorrect)
+				.append("betPoints", betPoints);
 	}
 	
 	public String toJSONString() {
-		// TODO complete this
-		return "{}";
+		return this.toJSON().toString();
 	}
 }

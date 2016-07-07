@@ -16,10 +16,7 @@ public class UserEntityManager extends EntityManager<User> {
 	}
 	
 	public User getByUsernamePassword(String username, String password) {
-		
-		this.getOne().where("username=\""+username.replaceAll("\"", "\\\"")+"\" AND password="+password.replaceAll("\"", "\\\"")).getFirst();
-		//TODO complete this
-		return new User();
+		return this.getOne().where("username=\""+username.replaceAll("\"", "\\\"")+"\" AND password=\""+password.replaceAll("\"", "\\\"")+"\"").getFirst();
 	}
 	
 	/**
@@ -29,8 +26,6 @@ public class UserEntityManager extends EntityManager<User> {
 	 * @return
 	 */
 	public boolean hasAlreadyBet(int userId, int matchId) {
-		
-		// TODO  complete this
 		Connection connect = null;
 		boolean hasAlreadyBet = false; 
 		try {

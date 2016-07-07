@@ -7,6 +7,7 @@ import java.util.LinkedList;
 
 import org.json.JSONString;
 
+import fr.paulcouaillier.tools.db.DBHelper;
 import fr.paulcouaillier.tools.db.Model;
 
 public class User extends Model implements JSONString {
@@ -15,6 +16,7 @@ public class User extends Model implements JSONString {
 	private String firstName;
 	private String lastName;
 	private String email;
+	protected final DBHelper.TABLES TABLE = DBHelper.TABLES.TABLE_USER;
 	
 	/**
 	 * foreign key {key:Bet.id, inversedBy: doneBy}

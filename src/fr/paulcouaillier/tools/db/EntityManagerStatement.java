@@ -35,7 +35,6 @@ public class EntityManagerStatement<M extends Model> {
 		/**
 		 * 
 		 * @param type
-		 * @param page
 		 */
 		public EntityManagerStatement(Class<M> type) {
 			this(type, 0, EntityManagerStatement.DEFAULT_PAGE_SIZE);
@@ -74,9 +73,7 @@ public class EntityManagerStatement<M extends Model> {
 				}
 				return null;
 			} catch (InstantiationException | IllegalAccessException | SQLException | ClassNotFoundException exception) {
-				/**
-				 * TODO handle error
-				 */
+				exception.printStackTrace();
 			}
 			return null;
 		}
@@ -90,7 +87,7 @@ public class EntityManagerStatement<M extends Model> {
 			try {
 				m = this.type.newInstance(); // Temporary M object to call m.TABLE_NAME
 				connect = this.connect();
-				ResultSet resultSet = connect.prepareStatement("SELECT * FROM "+m.TABLE+" "+where+" LIMIT"+this.page+","+this.pageSize+";").executeQuery();
+				ResultSet resultSet = connect.prepareStatement("SELECT * FROM "+m.TABLE+" "+where+" OFFSET "+this.page*this.pageSize+" LIMIT"+","+this.pageSize+";").executeQuery();
 				resultSet.beforeFirst();
 				mArray = (M[]) Array.newInstance(this.type, pageSize);
 				while(i<this.pageSize && resultSet.next()) {
@@ -102,9 +99,7 @@ public class EntityManagerStatement<M extends Model> {
 				mArray = (M[]) Array.newInstance(this.type, pageSize);
 				return mArray;
 			} catch(ClassNotFoundException | SQLException | InstantiationException | IllegalAccessException exception) {
-				/**
-				 * TODO handle error
-				 */
+				exception.printStackTrace();
 			}
 			return null;
 		}

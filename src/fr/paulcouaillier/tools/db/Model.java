@@ -8,13 +8,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public abstract class Model {
-	
+
 	protected Integer id;
 
-	public final String TABLE ="";
-	
-	public static final String DB = "db";
-	
+	protected final DBHelper.TABLES TABLE = null;
+
 	/**
 	 * This method have to set all type for request
 	 * @param preparedStatement
@@ -36,17 +34,31 @@ public abstract class Model {
 		try {
 			Class.forName(DBHelper.DRIVER);			
 			connect = DriverManager.getConnection(DBHelper.CONNECTION,DBHelper.DB_DEFAULT_USER_NAME, DBHelper.DB_DEFAULT_USER_PASSWORD);
-		} catch(Exception e) {}
+		} catch(Exception e) {
+			e.printStackTrace();
+			return;
+		}
 		try {
-
 			Statement statement = connect.createStatement();
 
 			PreparedStatement preparedStatement = null;
+			String query; 
 			if(this.id == null) {
-				preparedStatement = (PreparedStatement)connect.prepareStatement("INSERT INTO "+Model.DB+"."+TABLE+" (id, match, winner, scoreTeamOne, scoreTeamTwo, winnerIsCorrect, isScoreCorrect, betPoints) values (null, ?, ?, ?, ?, ?, ?, ?);");
+				query = "INSERT INTO "+DBHelper.DB_NAME+"."+TABLE.TABLE_NAME+" (id";
+
+				for(int i=1; i<TABLE.COLUMNS_NAME.length; i++) {
+					query += ", "+TABLE.COLUMNS_NAME[i];
+				}
+				query += ") values (null, ?, ?, ?, ?, ?, ?, ?);";
 			} else {
-				preparedStatement = (PreparedStatement)connect.prepareStatement("UPDATE "+Model.DB+"."+TABLE+" SET match=?, winner=?, scoreTeamOne=?, scoreTeamTwo=?, winnerIsCorrect=?, isScoreCorrect=?, betPoints=? WHERE id="+id+";");
+				query = "UPDATE "+DBHelper.DB_NAME+"."+TABLE+" SET id=?";
+				for(int i=1; i<TABLE.COLUMNS_NAME.length; i++) {
+					query += ",match=?";	
+				}
+				query += "WHERE id="+id+";";
+
 			}
+			preparedStatement = (PreparedStatement)connect.prepareStatement(query);
 
 			this.setterPreparedStatement(preparedStatement);
 
@@ -57,7 +69,11 @@ public abstract class Model {
 					resultSet.first();
 					this.id = resultSet.getInt("LAST_INSERT_ID()");
 				} catch(Exception e) {
-					resultSet.close();
+					e.printStackTrace();
+				} finally {
+					if(resultSet!=null) {
+						resultSet.close();
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -65,16 +81,16 @@ public abstract class Model {
 			try {
 				connect.close();
 			} catch (Exception e) {
-				
+				e.printStackTrace();
 			}
 		}
 	}
-	
+
 	@FunctionalInterface
 	public interface Setter {
 		public void set(ResultSet resultSet) throws SQLException;
 	}
-	
+
 	protected boolean errorCatcher(ResultSet resultSet, Setter setterCallback) {
 		try {
 			setterCallback.set(resultSet);
