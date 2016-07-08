@@ -7,11 +7,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.postgresql.util.PGobject;
+
 public abstract class Model {
 
-	protected Integer id;
+	protected PGobject id = setPGUUID();
 
 	protected final DBHelper.TABLES TABLE = null;
+	
+	private PGobject setPGUUID() {
+		PGobject uuid = new PGobject();
+		uuid.setType("UUID");
+		return uuid;
+	}
 
 	/**
 	 * This method have to set all type for request
@@ -25,7 +33,7 @@ public abstract class Model {
 	 */
 	public abstract void setterPreparedStatementResultSet(ResultSet resultSet);
 
-	public Integer getId() {
+	public PGobject getId() {
 		return id;
 	}
 
@@ -67,7 +75,7 @@ public abstract class Model {
 				try{
 					resultSet = statement.executeQuery("SELECT LAST_INSERT_ID();");
 					resultSet.first();
-					this.id = resultSet.getInt("LAST_INSERT_ID()");
+					this.id.setValue(resultSet.getString("LAST_INSERT_ID()"));
 				} catch(Exception e) {
 					e.printStackTrace();
 				} finally {

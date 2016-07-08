@@ -10,12 +10,13 @@ import java.sql.PreparedStatement;
 public class DBHelper {
 	
 
-	public static final String DRIVER = "org.postgresql.Driver";
-	public static final String DB_NAME= "";
-	public static final String DB_DEFAULT_USER_NAME= "";
-	public static final String DB_DEFAULT_USER_PASSWORD= "";
-	public static final String CONNECTION = "jdbc:postgresql://localhost/"+DB_NAME;
-
+	public static final String DRIVER 	= "org.postgresql.Driver";
+	public static final String SGBD 	= "postgresql";
+	public static final String DB_HOST	= "localhost";
+	public static final String DB_NAME	= "BetSport";
+	public static final String DB_DEFAULT_USER_NAME= "root";
+	public static final String DB_DEFAULT_USER_PASSWORD= "root";
+	public static final String CONNECTION = "jdbc:"+SGBD+"://"+DB_HOST+"/"+DB_NAME;
 
 	public static enum TABLES {
 		TABLE_BET("Bet", new String[]{
@@ -97,11 +98,11 @@ public class DBHelper {
         String query;
 
         for(TABLES table : TABLES.values()) {
-
-            query = "CREATE TABLE "
-                    + table.TABLE_NAME + "(_id";
+            query = "CREATE TABLE " + table.TABLE_NAME + "(_id";
             if(table.COLUMNS_TYPE[0] != "UUID") {
-                    query = query + " integer primary key autoincrement";
+            	query = query + " integer primary key autoincrement";
+            } else {
+            	query = query + " UUID";
             }
             for(int i=1; i < table.COLUMNS_NAME.length;i++) {
                 query += "," + table.COLUMNS_NAME[i] + " " + table.COLUMNS_TYPE[i] + " NOT NULL";
@@ -110,9 +111,7 @@ public class DBHelper {
             Statement statement = connection.createStatement();
             statement.executeQuery(query);
             statement.close();
-
         }
-        
         PreparedStatement preparedStatement = connection.prepareStatement("insert into " + TABLES.TABLE_USER.TABLE_NAME + " (id, name, username, password) VALUES (null, ?, ? , ?)");
         preparedStatement.setString(1, "root");
         preparedStatement.setString(2, "root");

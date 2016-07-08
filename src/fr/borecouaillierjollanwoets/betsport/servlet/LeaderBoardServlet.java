@@ -39,7 +39,7 @@ public class LeaderBoardServlet extends HttpServlet {
 		
 		UserEntityManager userEntityManager = new UserEntityManager();
 
-		User[] users = userEntityManager.getPage(page).run();
+		User[] users = userEntityManager.getPage(page).orderBy("").run();
 
 		PrintWriter writer = response.getWriter().append("[");
 		for(User user : users){

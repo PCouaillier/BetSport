@@ -8,6 +8,7 @@ import java.sql.SQLException;
 
 import org.json.JSONObject;
 import org.json.JSONString;
+import org.postgresql.util.PGobject;
 
 import fr.paulcouaillier.tools.db.DBHelper;
 import fr.paulcouaillier.tools.db.ForeignKey;
@@ -44,7 +45,7 @@ public class Bet extends Model implements JSONString {
 	 * @param scoreTeamOne
 	 * @param scoreTeamTwo
 	 */
-	public Bet(int match, int winner, int scoreTeamOne, int scoreTeamTwo, int doneByUser) {				
+	public Bet(PGobject match, PGobject winner, int scoreTeamOne, int scoreTeamTwo, PGobject doneByUser) {	
 		this(new ForeignKey<Match>(match), new ForeignKey<Team>(winner) , scoreTeamOne, scoreTeamTwo, new ForeignKey<User>(doneByUser));
 	}
 
@@ -52,6 +53,7 @@ public class Bet extends Model implements JSONString {
 		this(new ForeignKey<Match>(match), new ForeignKey<Team>(winner) , scoreTeamOne, scoreTeamTwo, new ForeignKey<User>(doneByUser));
 	}
 	public Bet(ForeignKey<Match> match, ForeignKey<Team> winner, int scoreTeamOne, int scoreTeamTwo, ForeignKey<User> doneByUser) {
+		super();
 		this.match = match;
 		this.winner = winner;
 		this.scoreTeamOne = scoreTeamOne;
@@ -86,7 +88,7 @@ public class Bet extends Model implements JSONString {
 		return this.doneByUser.get();
 	}
 
-	public Integer getUserId() {
+	public PGobject getUserId() {
 		return this.doneByUser.getId();
 	}
 	
@@ -139,12 +141,12 @@ public class Bet extends Model implements JSONString {
 	@Override
 	public void setterPreparedStatement(PreparedStatement preparedStatement) {
 		try {
-			preparedStatement.setInt(1, this.id);
+			preparedStatement.setString(1, this.id.toString());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		try {
-			preparedStatement.setInt(2, this.match.getId());
+			preparedStatement.setObject(2, this.match.getId());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -159,7 +161,7 @@ public class Bet extends Model implements JSONString {
 			e.printStackTrace();
 		}
 		try {
-			preparedStatement.setInt(5, this.doneByUser.getId());
+			preparedStatement.setObject(5, this.doneByUser.getId());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -168,11 +170,11 @@ public class Bet extends Model implements JSONString {
 	@Override
 	public void setterPreparedStatementResultSet(ResultSet resultSet) {
 		
-		this.errorCatcher(resultSet, rS -> {this.id = rS.getInt("id");});
-		this.errorCatcher(resultSet, rS -> {this.match = new ForeignKey<Match>(resultSet.getInt("match"));});
+		this.errorCatcher(resultSet, rS -> {this.id.setType(rS.getString("id"));});
+		this.errorCatcher(resultSet, rS -> {this.match = new ForeignKey<Match>((PGobject)resultSet.getObject("match"));});
 		this.errorCatcher(resultSet, rS -> {this.isScoreCorrect = resultSet.getBoolean("is_score_correct");});
 		this.errorCatcher(resultSet, rS -> {this.isWinnerCorrect = resultSet.getBoolean("is_winner_correct");});
-		this.errorCatcher(resultSet, rS -> {this.doneByUser = new ForeignKey<>(resultSet.getInt("user"));});
+		this.errorCatcher(resultSet, rS -> {this.doneByUser = new ForeignKey<>((PGobject)resultSet.getObject("user"));});
 	}
 	
 	public JSONObject toJSON() {

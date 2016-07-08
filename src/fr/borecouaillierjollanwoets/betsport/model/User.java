@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 
+import org.json.JSONObject;
 import org.json.JSONString;
 
 import fr.paulcouaillier.tools.db.DBHelper;
@@ -29,8 +30,13 @@ public class User extends Model implements JSONString {
 		super();
 	}
 	
-	public User(Integer id, String firstName, String lastName, String email) {
-		this.id = id;
+	public User(String id, String firstName, String lastName, String email) {
+		this();
+		try {
+			this.id.setValue(id);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
@@ -52,7 +58,7 @@ public class User extends Model implements JSONString {
 	@Override
 	public void setterPreparedStatement(PreparedStatement preparedStatement) {
 		try {
-			preparedStatement.setInt(1, this.id);
+			preparedStatement.setObject(1, this.id);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -76,7 +82,7 @@ public class User extends Model implements JSONString {
 	@Override
 	public void setterPreparedStatementResultSet(ResultSet resultSet) {
 		try {
-			this.id = resultSet.getInt("id");
+			this.id.setValue(resultSet.getString("id"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -97,7 +103,15 @@ public class User extends Model implements JSONString {
 		}
 	}
 	
+	public JSONObject toJSON() {
+		return (new JSONObject())
+				.append("id", this.id.toString())
+				.append("firstName", this.firstName)
+				.append("lastName", this.lastName)
+				.append("email", this.email);
+	}
+	
 	public String toJSONString() {
-		return "{\"id\"="+this.id+",\"firstName\"=\""+this.firstName+"\",\"lastName\"=\""+this.lastName+"\",\"email\"=\""+this.email+"\"}";
+		return this.toJSON().toString();
 	}
 }

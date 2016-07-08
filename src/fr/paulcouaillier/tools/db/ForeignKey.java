@@ -1,21 +1,29 @@
 package fr.paulcouaillier.tools.db;
 
+import org.postgresql.util.PGobject;
+
 public class ForeignKey<M extends Model> {
 	
 	private M model;
 	
-	private Integer modelId;
+	private PGobject modelId = setPGUUID(); 
+	
+	private PGobject setPGUUID() {
+		PGobject uuid = new PGobject();
+		uuid.setType("UUID");
+		return uuid;
+	}
 	
 	public ForeignKey(M model) {
 		this.model = model;
 		this.modelId = model.getId();
 	}
 	
-	public ForeignKey(int modelId) {
+	public ForeignKey(PGobject modelId) {
 		this.modelId = modelId;
 	}
 	
-	public Integer getId() {
+	public PGobject getId() {
 		if(this.modelId != null) {
 			return modelId;
 		} else if (this.model != null) {
@@ -32,7 +40,7 @@ public class ForeignKey<M extends Model> {
 		}
 		return null;
 	}
-	public void setId(Integer modelId) {
+	public void setId(PGobject modelId) {
 		this.modelId = modelId;
 		if(this.model != null && this.model.getId() != this.modelId) {
 			this.model = null; 

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import org.json.JSONObject;
 import org.json.JSONString;
+import org.postgresql.util.PGobject;
 
 import fr.paulcouaillier.tools.db.DBHelper;
 import fr.paulcouaillier.tools.db.ForeignKey;
@@ -14,7 +15,7 @@ import fr.paulcouaillier.tools.db.Model;
 
 public class Match extends Model implements JSONString {
 
-	private Integer id;
+	// protected PGobject id;
 	
 	private ForeignKey<Team> teamOne;
 	
@@ -37,10 +38,16 @@ public class Match extends Model implements JSONString {
 	protected final DBHelper.TABLES TABLE = DBHelper.TABLES.TABLE_MATCH;
 
 	public Match() {
+		super();
 	}
 	
-	public Match(Integer id) {
-		this.id = id;
+	public Match(String id) {
+		this();
+		try {
+			this.id.setValue(id);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public Match setTeamOne(Team team) {
@@ -48,7 +55,7 @@ public class Match extends Model implements JSONString {
 		return this;
 	}
 	
-	public Integer getId() {
+	public PGobject getId() {
 		return this.id;
 	}
 
@@ -128,9 +135,9 @@ public class Match extends Model implements JSONString {
 
 	@Override
 	public void setterPreparedStatementResultSet(ResultSet resultSet) {
-		try {this.id 			= resultSet.getInt("id");			  			} catch (SQLException sqlException) {sqlException.printStackTrace();}
-		try {this.teamOne 		= new ForeignKey<>(resultSet.getInt("teamOne"));} catch (SQLException sqlException) {sqlException.printStackTrace();}
-		try {this.teamTwo 	=	 new ForeignKey<>(resultSet.getInt("teamTwo"));	} catch (SQLException sqlException) {sqlException.printStackTrace();}
+		try {this.id.setValue(resultSet.getString("id"));				  		} catch (SQLException sqlException) {sqlException.printStackTrace();}
+		try {this.teamOne 		= new ForeignKey<>((PGobject)resultSet.getObject("teamOne"));} catch (SQLException sqlException) {sqlException.printStackTrace();}
+		try {this.teamTwo 		= new ForeignKey<>((PGobject)resultSet.getObject("teamTwo"));	} catch (SQLException sqlException) {sqlException.printStackTrace();}
 		try {this.scoreTeamOne 	= resultSet.getInt("scoreTeamOne"); 			} catch (SQLException sqlException) {sqlException.printStackTrace();}
 		try {this.scoreTeamTwo 	= resultSet.getInt("scoreTeamTwo");				} catch (SQLException sqlException) {sqlException.printStackTrace();}
 		try {this.teamOneQuote 	= resultSet.getDouble("teamOneQuote");			} catch (SQLException sqlException) {sqlException.printStackTrace();}
@@ -140,9 +147,9 @@ public class Match extends Model implements JSONString {
 
 	@Override
 	public void setterPreparedStatement(PreparedStatement preparedStatement) {
-		try {preparedStatement.setInt(1, this.id);				} catch (SQLException sqlException) {sqlException.printStackTrace();}
-		try {preparedStatement.setInt(2, this.teamOne.getId());	} catch (SQLException sqlException) {sqlException.printStackTrace();}
-		try {preparedStatement.setInt(3, this.teamTwo.getId());	} catch (SQLException sqlException) {sqlException.printStackTrace();}
+		try {preparedStatement.setString(1, this.id.toString());} catch (SQLException sqlException) {sqlException.printStackTrace();}
+		try {preparedStatement.setObject(2, this.teamOne.getId());	} catch (SQLException sqlException) {sqlException.printStackTrace();}
+		try {preparedStatement.setObject(3, this.teamTwo.getId());	} catch (SQLException sqlException) {sqlException.printStackTrace();}
 		try {preparedStatement.setInt(4, this.scoreTeamOne);	} catch (SQLException sqlException) {sqlException.printStackTrace();}
 		try {preparedStatement.setInt(5, this.scoreTeamTwo);	} catch (SQLException sqlException) {sqlException.printStackTrace();}
 		try {preparedStatement.setDouble(6, this.teamOneQuote);	} catch (SQLException sqlException) {sqlException.printStackTrace();}

@@ -13,6 +13,7 @@ public class EntityManagerStatement<M extends Model> {
 		private int page;
 		private int pageSize;
 		private String where = "";
+		private String order = null;
 
 		private final Class<M> type;
 
@@ -59,6 +60,11 @@ public class EntityManagerStatement<M extends Model> {
 			this.where = where;
 			return this;
 		}
+		
+		public EntityManagerStatement<M> orderBy(String order) {
+			this.order = order;
+			return this;
+		}
 
 		public M getFirst() {
 			Connection connect;
@@ -87,7 +93,12 @@ public class EntityManagerStatement<M extends Model> {
 			try {
 				m = this.type.newInstance(); // Temporary M object to call m.TABLE_NAME
 				connect = this.connect();
-				ResultSet resultSet = connect.prepareStatement("SELECT * FROM "+m.TABLE+" "+where+" OFFSET "+this.page*this.pageSize+" LIMIT"+","+this.pageSize+";").executeQuery();
+				String query = "SELECT * FROM "+m.TABLE+" "+where+" OFFSET "+this.page*this.pageSize+" LIMIT"+","+this.pageSize;
+				if(this.order != null) {
+					query += " ORDER BY "+this.order;
+				}
+				query += ";"; 
+				ResultSet resultSet = connect.prepareStatement(query).executeQuery();
 				resultSet.beforeFirst();
 				mArray = (M[]) Array.newInstance(this.type, pageSize);
 				while(i<this.pageSize && resultSet.next()) {

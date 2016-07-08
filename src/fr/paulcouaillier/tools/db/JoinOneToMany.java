@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.postgresql.util.PGobject;
+
 public class JoinOneToMany<M extends Model, N extends Model>{
 
 	private final String column;
@@ -19,7 +21,7 @@ public class JoinOneToMany<M extends Model, N extends Model>{
 	public JoinOneToMany(M mModel, Class<N> type, String tableName, String colmun) {
 		this(new ForeignKey<M>(mModel), type, tableName, colmun);
 	}
-	public JoinOneToMany(int mModel, Class<N> type, String tableName, String colmun) {
+	public JoinOneToMany(PGobject mModel, Class<N> type, String tableName, String colmun) {
 		this(new ForeignKey<M>(mModel), type, tableName, colmun);
 	}
 	public JoinOneToMany(ForeignKey<M> mModel, Class<N> type, String tableName, String colmun) {
@@ -39,7 +41,7 @@ public class JoinOneToMany<M extends Model, N extends Model>{
 		Connection connection = DBHelper.connect();
 		PreparedStatement preparedStatement = connection.prepareStatement("SELECT COUNT(*) AS RESULT_SET_LENGTH, * FROM "+tableName+" WHERE ? = ?");
 		preparedStatement.setString(1, this.column);
-		preparedStatement.setInt(2, this.m.getId());
+		preparedStatement.setObject(2, this.m.getId());
 		preparedStatement.execute();
 		ResultSet resultSet = preparedStatement.getResultSet();
 

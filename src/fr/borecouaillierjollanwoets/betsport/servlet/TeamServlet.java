@@ -2,6 +2,7 @@ package fr.borecouaillierjollanwoets.betsport.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.ws.http.HTTPException;
+
+import org.postgresql.util.PGobject;
 
 import fr.borecouaillierjollanwoets.betsport.entitymanager.TeamEntityManager;
 import fr.borecouaillierjollanwoets.betsport.model.Team;
@@ -48,18 +51,22 @@ public class TeamServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
             
-        Integer id;
+		PGobject id;
         String name;
 
+        PGobject pGobject = new PGobject();
         //id = Integer.parseInt(request.getParameter("page"));
 
         try {
-        	id = Integer.parseInt(request.getParameter("id"));;
-        } catch(NumberFormatException ignore) {
+        	pGobject.setType("UUID");
+        	pGobject.setValue(request.getParameter("id"));
+        	id = pGobject;
+        } catch(SQLException exception) {
+        	exception.printStackTrace();
             throw new HTTPException(400);
         }
         name = request.getParameter("name");
-        Team team = new Team(id, name);
+        Team team = new Team(id.toString(), name);
         team.persist();
         response.getWriter().append(team.toJSONString());
 	}
