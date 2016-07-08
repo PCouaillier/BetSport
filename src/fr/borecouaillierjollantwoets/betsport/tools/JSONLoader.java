@@ -1,4 +1,4 @@
-package fr.borecouaillierjollanwoets.betsport.tools;
+package fr.borecouaillierjollantwoets.betsport.tools;
 
 import java.io.BufferedReader;
 import java.io.IOException;

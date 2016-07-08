@@ -1,4 +1,4 @@
-package fr.borecouaillierjollanwoets.betsport.servlet;
+package fr.borecouaillierjollantwoets.betsport.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import fr.borecouaillierjollanwoets.betsport.entitymanager.UserEntityManager;
-import fr.borecouaillierjollanwoets.betsport.model.User;
+import fr.borecouaillierjollantwoets.betsport.entitymanager.UserEntityManager;
+import fr.borecouaillierjollantwoets.betsport.model.User;
 
 /**
  * Servlet implementation class LeaderBoardServlet

@@ -1,4 +1,4 @@
-package fr.borecouaillierjollanwoets.betsport.entitymanager;
+package fr.borecouaillierjollantwoets.betsport.entitymanager;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,7 +10,7 @@ import org.postgresql.util.PGobject;
 import ca.defuse.PasswordStorage;
 import ca.defuse.PasswordStorage.CannotPerformOperationException;
 import ca.defuse.PasswordStorage.InvalidHashException;
-import fr.borecouaillierjollanwoets.betsport.model.User;
+import fr.borecouaillierjollantwoets.betsport.model.User;
 import fr.paulcouaillier.tools.db.DBHelper;
 import fr.paulcouaillier.tools.db.EntityManager;
 

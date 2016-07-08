@@ -1,4 +1,4 @@
-package fr.borecouaillierjollanwoets.betsport.servlet;
+package fr.borecouaillierjollantwoets.betsport.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,8 +13,8 @@ import javax.xml.ws.http.HTTPException;
 
 import org.postgresql.util.PGobject;
 
-import fr.borecouaillierjollanwoets.betsport.entitymanager.TeamEntityManager;
-import fr.borecouaillierjollanwoets.betsport.model.Team;
+import fr.borecouaillierjollantwoets.betsport.entitymanager.TeamEntityManager;
+import fr.borecouaillierjollantwoets.betsport.model.Team;
 
 /**
  * Servlet implementation class TeamServlet

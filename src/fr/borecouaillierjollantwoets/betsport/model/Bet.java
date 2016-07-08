@@ -1,4 +1,4 @@
-package fr.borecouaillierjollanwoets.betsport.model;
+package fr.borecouaillierjollantwoets.betsport.model;
 
 import fr.paulcouaillier.tools.db.Model;
 

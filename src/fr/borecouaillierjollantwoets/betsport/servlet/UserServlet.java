@@ -1,4 +1,4 @@
-package fr.borecouaillierjollanwoets.betsport.servlet;
+package fr.borecouaillierjollantwoets.betsport.servlet;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -14,7 +14,7 @@ import org.postgresql.util.PGobject;
 
 import ca.defuse.PasswordStorage;
 import ca.defuse.PasswordStorage.CannotPerformOperationException;
-import fr.borecouaillierjollanwoets.betsport.model.User;
+import fr.borecouaillierjollantwoets.betsport.model.User;
 
 /**
  * Servlet implementation class UserServlet

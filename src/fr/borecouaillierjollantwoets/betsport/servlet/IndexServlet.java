@@ -1,4 +1,4 @@
-package fr.borecouaillierjollanwoets.betsport.servlet;
+package fr.borecouaillierjollantwoets.betsport.servlet;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import fr.borecouaillierjollanwoets.betsport.entitymanager.MatchEntityManager;
-import fr.borecouaillierjollanwoets.betsport.model.Match;
+import fr.borecouaillierjollantwoets.betsport.entitymanager.MatchEntityManager;
+import fr.borecouaillierjollantwoets.betsport.model.Match;
 
 /**
  * Servlet implementation class IndexServlet

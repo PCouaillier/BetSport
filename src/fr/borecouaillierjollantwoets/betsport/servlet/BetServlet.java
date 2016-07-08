@@ -1,4 +1,4 @@
-package fr.borecouaillierjollanwoets.betsport.servlet;
+package fr.borecouaillierjollantwoets.betsport.servlet;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -10,14 +10,14 @@ import javax.xml.ws.http.HTTPException;
 
 import org.json.JSONObject;
 
-import fr.borecouaillierjollanwoets.betsport.entitymanager.BetEntityManager;
-import fr.borecouaillierjollanwoets.betsport.entitymanager.MatchEntityManager;
-import fr.borecouaillierjollanwoets.betsport.entitymanager.UserEntityManager;
-import fr.borecouaillierjollanwoets.betsport.model.Bet;
-import fr.borecouaillierjollanwoets.betsport.model.Match;
-import fr.borecouaillierjollanwoets.betsport.model.Team;
-import fr.borecouaillierjollanwoets.betsport.model.User;
-import fr.borecouaillierjollanwoets.betsport.tools.JSONLoader;
+import fr.borecouaillierjollantwoets.betsport.entitymanager.BetEntityManager;
+import fr.borecouaillierjollantwoets.betsport.entitymanager.MatchEntityManager;
+import fr.borecouaillierjollantwoets.betsport.entitymanager.UserEntityManager;
+import fr.borecouaillierjollantwoets.betsport.model.Bet;
+import fr.borecouaillierjollantwoets.betsport.model.Match;
+import fr.borecouaillierjollantwoets.betsport.model.Team;
+import fr.borecouaillierjollantwoets.betsport.model.User;
+import fr.borecouaillierjollantwoets.betsport.tools.JSONLoader;
 
 /**
  * Servlet implementation class BetServlet

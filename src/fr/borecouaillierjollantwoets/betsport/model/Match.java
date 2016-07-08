@@ -1,4 +1,4 @@
-package fr.borecouaillierjollanwoets.betsport.model;
+package fr.borecouaillierjollantwoets.betsport.model;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;

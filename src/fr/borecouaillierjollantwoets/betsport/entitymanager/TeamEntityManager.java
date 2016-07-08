@@ -1,6 +1,6 @@
-package fr.borecouaillierjollanwoets.betsport.entitymanager;
+package fr.borecouaillierjollantwoets.betsport.entitymanager;
 
-import fr.borecouaillierjollanwoets.betsport.model.Team;
+import fr.borecouaillierjollantwoets.betsport.model.Team;
 import fr.paulcouaillier.tools.db.EntityManager;
 
 public class TeamEntityManager extends EntityManager<Team> {
