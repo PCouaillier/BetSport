@@ -19,7 +19,6 @@ public class User extends Model implements JSONString {
 	private String email;
 	private String username;
 	private String password;
-	protected final DBHelper.TABLES TABLE = DBHelper.TABLES.TABLE_USER;
 	
 	/**
 	 * foreign key {key:Bet.id, inversedBy: doneBy}
@@ -132,5 +131,9 @@ public class User extends Model implements JSONString {
 	
 	public String toJSONString() {
 		return this.toJSON().toString();
+	}
+	
+	public DBHelper.TABLES getTable() {
+		return DBHelper.TABLES.TABLE_USER;
 	}
 }

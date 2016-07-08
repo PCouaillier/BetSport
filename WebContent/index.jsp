@@ -39,7 +39,6 @@ and open the template in the editor.
         <div class="body">
             
             <div class="register_form">
-		
 		<form action="" method="post" class="">
 			<section class="input-list style-1 clearfix">
 		  
@@ -67,27 +66,20 @@ and open the template in the editor.
                 </form>
             </div>	
             
-            
-            <div class="match">
-                <img src='image/baniere.jpg' class='banniere'/>
-                <div class='equipe1' data-equipe='1'>
-                    
-                    arsenal
-                </div>
-                <div class="equipe2" data-equipe='2'>
-                    bayern 
-                </div>
-            </div>
+            <c:forEach items="${matches}" var="match">
+	            <c:if test="${not empty match}">
+		            <div class="match">
+		                <img src='image/baniere.jpg' class='banniere'/>
+		                <div class='equipe1' data-equipe="${match.getTeamOne().getId().getValue()}">
+		                    ${match.getTeamOne().get().getName()}
+		                </div>
+		                <div class="equipe2" data-equipe="">
+		                    ${match.getTeamTwo().get().getName()}
+		                </div>
+		            </div>
+		         </c:if>
+            </c:forEach>
         </div>
-            <div class="match">
-                <img src='image/baniere.jpg' class='banniere'/>
-                <div class='equipe1' data-equipe='3'>
-                    arsenal
-                </div>
-                <div class="equipe2" data-equipe='4'>
-                    bayern 
-                </div>
-            </div>
         
         <div class="footer">
             

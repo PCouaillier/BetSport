@@ -25,7 +25,9 @@ public class DBHelper {
 				"scoreTeamTwo",
 				"isWinnerCorrect",
 				"isScoreCorrect",
-				"betPoints"
+				"betPoints",
+				"match",
+				"user"
 		}, new String[]{
 				"UUID",
 				"UUID",
@@ -33,7 +35,9 @@ public class DBHelper {
 				"Integer",
 				"boolean",
 				"boolean",
-				"Integer"
+				"Integer",
+				"UUID",
+				"UUID"
 		}),
 		TABLE_MATCH("Match", new String[]{
 				"id",
@@ -41,12 +45,16 @@ public class DBHelper {
 				"teamTwo",
 				"teamOneQuote",
 				"teamTwoQuote",
+				"scoreTeamOne",
+				"scoreTeamTwo",
 				"betLocked",
 				"matchDate"
 		}, new String[] {
 				"UUID",
 				"UUID",
 				"UUID",
+				"Integer",
+				"Integer",
 				"Integer",
 				"Integer",
 				"boolean",
@@ -106,9 +114,9 @@ public class DBHelper {
         for(TABLES table : TABLES.values()) {
             query = "CREATE TABLE " + table.TABLE_NAME + "(id";
             if(table.COLUMNS_TYPE[0] != "UUID") {
-            	query = query + " Integer AUTOINCREMENT NOT NULL";
+            	query = query + " Integer AUTOINCREMENT NOT NULL DEFAULT uuid_generate_v4()";
             } else {
-            	query = query + " UUID NOT NULL";
+            	query = query + " UUID NOT NULL DEFAULT uuid_generate_v4()";
             }
             for(int i=1; i < table.COLUMNS_NAME.length;i++) {
                 query += "," + table.COLUMNS_NAME[i] + " " + table.COLUMNS_TYPE[i];

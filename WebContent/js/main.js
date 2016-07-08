@@ -10,10 +10,10 @@ $(document).ready(function() {
 			$('.open').removeClass('oppenned');
 			event.stopPropagation();
 		});
-                
-                
+
+
                  $(".equipe1").click(function () {
-            
+
                     var id = $(this).data("equipe");
                     var DATA = 'equipe=' + id ;
 

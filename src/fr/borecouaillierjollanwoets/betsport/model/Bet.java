@@ -30,8 +30,10 @@ public class Bet extends Model implements JSONString {
 	private Boolean isScoreCorrect = null;
 
 	private Integer betPoints = null;
+	
+	private ForeignKey<User> user;
 
-	protected final DBHelper.TABLES TABLE = DBHelper.TABLES.TABLE_BET;
+	public final DBHelper.TABLES TABLE = DBHelper.TABLES.TABLE_BET;
 
 	/**
 	 * foreign key
@@ -145,23 +147,24 @@ public class Bet extends Model implements JSONString {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
 		try {
-			preparedStatement.setObject(2, this.match.getId());
+			preparedStatement.setBoolean(2, this.isScoreCorrect);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		try {
-			preparedStatement.setBoolean(3, this.isScoreCorrect);
+			preparedStatement.setBoolean(3, this.isWinnerCorrect);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		try {
-			preparedStatement.setBoolean(4, this.isWinnerCorrect);
+			preparedStatement.setObject(4, this.doneByUser.getId());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		try {
-			preparedStatement.setObject(5, this.doneByUser.getId());
+			preparedStatement.setObject(5, this.match.getId());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -171,10 +174,10 @@ public class Bet extends Model implements JSONString {
 	public void setterPreparedStatementResultSet(ResultSet resultSet) {
 		
 		this.errorCatcher(resultSet, rS -> {this.id.setType(rS.getString("id"));});
-		this.errorCatcher(resultSet, rS -> {this.match = new ForeignKey<Match>((PGobject)resultSet.getObject("match"));});
 		this.errorCatcher(resultSet, rS -> {this.isScoreCorrect = resultSet.getBoolean("is_score_correct");});
 		this.errorCatcher(resultSet, rS -> {this.isWinnerCorrect = resultSet.getBoolean("is_winner_correct");});
 		this.errorCatcher(resultSet, rS -> {this.doneByUser = new ForeignKey<>((PGobject)resultSet.getObject("user"));});
+		this.errorCatcher(resultSet, rS -> {this.match = new ForeignKey<Match>((PGobject)resultSet.getObject("match"));});
 	}
 	
 	public JSONObject toJSON() {
@@ -190,5 +193,9 @@ public class Bet extends Model implements JSONString {
 	
 	public String toJSONString() {
 		return this.toJSON().toString();
+	}
+	
+	public DBHelper.TABLES getTable() {
+		return DBHelper.TABLES.TABLE_BET;
 	}
 }

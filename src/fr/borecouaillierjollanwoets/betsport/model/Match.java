@@ -35,7 +35,7 @@ public class Match extends Model implements JSONString {
 	
 	private Date matchDate;
 	
-	protected final DBHelper.TABLES TABLE = DBHelper.TABLES.TABLE_MATCH;
+	public final DBHelper.TABLES TABLE = DBHelper.TABLES.TABLE_MATCH;
 
 	public Match() {
 		super();
@@ -50,6 +50,10 @@ public class Match extends Model implements JSONString {
 		}
 	}
 	
+	public DBHelper.TABLES getTable() {
+		return DBHelper.TABLES.TABLE_MATCH;
+	}
+	
 	public Match setTeamOne(Team team) {
 		this.teamOne = new ForeignKey<>(team);
 		return this;
@@ -59,8 +63,8 @@ public class Match extends Model implements JSONString {
 		return this.id;
 	}
 
-	public Team getTeamOne() {
-		return this.teamOne.get();
+	public ForeignKey<Team> getTeamOne() {
+		return this.teamOne;
 	}
 
 	public Match setTeamTwo(Team team) {
@@ -68,8 +72,8 @@ public class Match extends Model implements JSONString {
 		return this;
 	}
 
-	public Team getTeamTwo() {
-		return this.teamTwo.get();
+	public ForeignKey<Team> getTeamTwo() {
+		return this.teamTwo;
 	}
 	
 	public Match setWinner(Team winner) {
@@ -136,13 +140,15 @@ public class Match extends Model implements JSONString {
 	@Override
 	public void setterPreparedStatementResultSet(ResultSet resultSet) {
 		try {this.id.setValue(resultSet.getString("id"));				  		} catch (SQLException sqlException) {sqlException.printStackTrace();}
-		try {this.teamOne 		= new ForeignKey<>((PGobject)resultSet.getObject("teamOne"));} catch (SQLException sqlException) {sqlException.printStackTrace();}
-		try {this.teamTwo 		= new ForeignKey<>((PGobject)resultSet.getObject("teamTwo"));	} catch (SQLException sqlException) {sqlException.printStackTrace();}
+		try {this.teamOne 		= new ForeignKey<>(setPGUUID(resultSet.getString("teamOne")));} catch (SQLException sqlException) {sqlException.printStackTrace();}
+		try {this.teamTwo 		= new ForeignKey<>(setPGUUID(resultSet.getString("teamTwo")));} catch (SQLException sqlException) {sqlException.printStackTrace();}
 		try {this.scoreTeamOne 	= resultSet.getInt("scoreTeamOne"); 			} catch (SQLException sqlException) {sqlException.printStackTrace();}
 		try {this.scoreTeamTwo 	= resultSet.getInt("scoreTeamTwo");				} catch (SQLException sqlException) {sqlException.printStackTrace();}
 		try {this.teamOneQuote 	= resultSet.getDouble("teamOneQuote");			} catch (SQLException sqlException) {sqlException.printStackTrace();}
 		try {this.teamTwoQuote 	= resultSet.getDouble("teamTwoQuote");			} catch (SQLException sqlException) {sqlException.printStackTrace();}
 		try {this.matchDate 	= resultSet.getDate("matchDate");				} catch (SQLException sqlException) {sqlException.printStackTrace();}
+		this.teamOne.setType(Team.class);
+		this.teamTwo.setType(Team.class);
 	}
 
 	@Override
@@ -164,14 +170,14 @@ public class Match extends Model implements JSONString {
 
 	public JSONObject toJSON() {
 		return (new JSONObject())
-				.append("id", 			this.id)
-				.append("teamOne", 		this.teamOne.get().toJSON())
-				.append("teamTwo", 		this.teamTwo.get().toJSON())
-				.append("scoreTeamOne", this.scoreTeamOne)
-				.append("scoreTeamTwo", this.scoreTeamTwo)
-				.append("teamOneQuote", this.teamOneQuote)
-				.append("teamTwoQuote", this.teamTwoQuote)
-				.append("matchDate", 	this.matchDate);
+				.append("id", 			this.id.toString())
+				.append("teamOne", 		this.teamOne.getId().toString())
+				.append("teamTwo", 		this.teamTwo.getId().toString())
+				.append("scoreTeamOne", this.scoreTeamOne.toString())
+				.append("scoreTeamTwo", this.scoreTeamTwo.toString())
+				.append("teamOneQuote", this.teamOneQuote.toString())
+				.append("teamTwoQuote", this.teamTwoQuote.toString());
+				
 	}
 	
 }

@@ -12,13 +12,23 @@ import org.postgresql.util.PGobject;
 public abstract class Model {
 
 	protected PGobject id = setPGUUID();
-
-	protected final DBHelper.TABLES TABLE = null;
 	
-	private PGobject setPGUUID() {
+	protected PGobject setPGUUID() {
 		PGobject uuid = new PGobject();
-		uuid.setType("UUID");
+		uuid.setType("uuid");
 		return uuid;
+	}
+	protected PGobject setPGUUID(String string) {
+		PGobject uuid = setPGUUID();
+		try {
+			uuid.setValue(string);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return uuid;
+	}
+	protected PGobject setPGUUID(Object uuid) {
+		return (PGobject)uuid;
 	}
 
 	/**
@@ -52,15 +62,15 @@ public abstract class Model {
 			PreparedStatement preparedStatement = null;
 			String query; 
 			if(this.id == null) {
-				query = "INSERT INTO "+DBHelper.DB_NAME+"."+TABLE.TABLE_NAME+" (id";
+				query = "INSERT INTO "+DBHelper.DB_NAME+"."+getTable().TABLE_NAME+" (id";
 
-				for(int i=1; i<TABLE.COLUMNS_NAME.length; i++) {
-					query += ", "+TABLE.COLUMNS_NAME[i];
+				for(int i=1; i<getTable().COLUMNS_NAME.length; i++) {
+					query += ", "+getTable().COLUMNS_NAME[i];
 				}
 				query += ") values (null, ?, ?, ?, ?, ?, ?, ?);";
 			} else {
-				query = "UPDATE "+DBHelper.DB_NAME+"."+TABLE+" SET id=?";
-				for(int i=1; i<TABLE.COLUMNS_NAME.length; i++) {
+				query = "UPDATE "+DBHelper.DB_NAME+"."+getTable()+" SET id=?";
+				for(int i=1; i<getTable().COLUMNS_NAME.length; i++) {
 					query += ",match=?";	
 				}
 				query += "WHERE id="+id+";";
@@ -98,6 +108,8 @@ public abstract class Model {
 	public interface Setter {
 		public void set(ResultSet resultSet) throws SQLException;
 	}
+	
+	public abstract DBHelper.TABLES getTable();
 
 	protected boolean errorCatcher(ResultSet resultSet, Setter setterCallback) {
 		try {

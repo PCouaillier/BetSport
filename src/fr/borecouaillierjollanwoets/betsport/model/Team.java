@@ -16,7 +16,7 @@ public class Team extends Model implements JSONString {
 	
 	private String name;
 
-	protected final DBHelper.TABLES TABLE = DBHelper.TABLES.TABLE_TEAM;
+	public final DBHelper.TABLES TABLE = DBHelper.TABLES.TABLE_TEAM;
 
 	public Team(){
 		super();
@@ -53,7 +53,7 @@ public class Team extends Model implements JSONString {
 	@Override
 	public void setterPreparedStatementResultSet(ResultSet resultSet) {
 		try {
-			this.id.setValue(resultSet.getObject("id").toString());
+			this.id = setPGUUID(resultSet.getObject("id"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -74,6 +74,10 @@ public class Team extends Model implements JSONString {
 		return (new JSONObject())
 				.append("id", this.id)
 				.append("name", this.name);
+	}
+	
+	public DBHelper.TABLES getTable() {
+		return DBHelper.TABLES.TABLE_TEAM;
 	}
 
 }

@@ -5,13 +5,14 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
 
 public class EntityManagerStatement<M extends Model> {
 
 		private static final int DEFAULT_PAGE_SIZE = 25;
 	
-		private int page;
-		private int pageSize;
+		private int page = 0;
+		private int pageSize = DEFAULT_PAGE_SIZE;
 		private String where = "";
 		private String order = null;
 
@@ -72,7 +73,7 @@ public class EntityManagerStatement<M extends Model> {
 			try {
 				m = this.type.newInstance();
 				connect = this.connect();
-				ResultSet resultSet = connect.prepareStatement("SELECT * FROM "+m.TABLE+" "+where+";").executeQuery();
+				ResultSet resultSet = connect.prepareStatement("SELECT * FROM "+m.getTable().TABLE_NAME+" "+where+";").executeQuery();
 				if(resultSet.first()) {
 					m.setterPreparedStatementResultSet(resultSet);
 					return m;
@@ -89,29 +90,50 @@ public class EntityManagerStatement<M extends Model> {
 			Connection connect = null;
 			M m;
 			M[] mArray;
+			LinkedList<M> mList = new LinkedList<>();
 			int i = 0;
 			try {
 				m = this.type.newInstance(); // Temporary M object to call m.TABLE_NAME
 				connect = this.connect();
-				String query = "SELECT * FROM "+m.TABLE+" "+where+" OFFSET "+this.page*this.pageSize+" LIMIT"+","+this.pageSize;
-				if(this.order != null) {
+				String query = "SELECT ";
+				for(String tableName : m.getTable().COLUMNS_NAME) {
+					query += tableName + " AS " + tableName + ", ";
+				}
+				query = (String) query.subSequence(0, query.length()-2);
+				query+=" FROM "+m.getTable().TABLE_NAME;
+				if(where !=null && !where.equals("")) {
+					query +=" WHERE "+where;
+				}
+				query += " OFFSET "+this.page*this.pageSize+" LIMIT "+this.pageSize;
+				if(this.order != null && !	this.order.equals("")) {
 					query += " ORDER BY "+this.order;
 				}
 				query += ";"; 
+				System.out.println(query);
 				ResultSet resultSet = connect.prepareStatement(query).executeQuery();
-				resultSet.beforeFirst();
+				
 				mArray = (M[]) Array.newInstance(this.type, pageSize);
 				while(i<this.pageSize && resultSet.next()) {
 					m = this.type.newInstance();
 					m.setterPreparedStatementResultSet(resultSet);
-					mArray[i] = m;
+					mList.add(m);
 					i++;
 				}
-				mArray = (M[]) Array.newInstance(this.type, pageSize);
+				if(pageSize<mList.size()) {
+					mArray = (M[]) Array.newInstance(this.type, pageSize);
+				} else {
+					mArray = (M[]) Array.newInstance(this.type, mList.size());
+				}
+				//return mArray;
+				i = 0;
+				for(M model : mList) {
+					mArray[i] = model;
+					i++;
+				}
 				return mArray;
 			} catch(ClassNotFoundException | SQLException | InstantiationException | IllegalAccessException exception) {
 				exception.printStackTrace();
 			}
-			return null;
+			return (M[]) Array.newInstance(this.type, 0);
 		}
 	}
