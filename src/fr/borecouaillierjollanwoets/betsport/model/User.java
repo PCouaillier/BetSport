@@ -17,6 +17,8 @@ public class User extends Model implements JSONString {
 	private String firstName;
 	private String lastName;
 	private String email;
+	private String username;
+	private String password;
 	protected final DBHelper.TABLES TABLE = DBHelper.TABLES.TABLE_USER;
 	
 	/**
@@ -30,7 +32,7 @@ public class User extends Model implements JSONString {
 		super();
 	}
 	
-	public User(String id, String firstName, String lastName, String email) {
+	public User(String id, String firstName, String lastName, String email, String username, String password) {
 		this();
 		try {
 			this.id.setValue(id);
@@ -40,6 +42,12 @@ public class User extends Model implements JSONString {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
+		this.username = username;
+		this.password = password;
+	}
+	
+	public String getPassword() {
+		return this.password;
 	}
 
 	/**
@@ -77,6 +85,16 @@ public class User extends Model implements JSONString {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		try {
+			preparedStatement.setString(5, this.username);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+			preparedStatement.setString(6, this.password);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -108,7 +126,8 @@ public class User extends Model implements JSONString {
 				.append("id", this.id.toString())
 				.append("firstName", this.firstName)
 				.append("lastName", this.lastName)
-				.append("email", this.email);
+				.append("email", this.email)
+				.append("username", this.username);
 	}
 	
 	public String toJSONString() {

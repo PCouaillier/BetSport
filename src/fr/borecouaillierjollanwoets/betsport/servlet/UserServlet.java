@@ -12,6 +12,8 @@ import javax.xml.ws.http.HTTPException;
 
 import org.postgresql.util.PGobject;
 
+import ca.defuse.PasswordStorage;
+import ca.defuse.PasswordStorage.CannotPerformOperationException;
 import fr.borecouaillierjollanwoets.betsport.model.User;
 
 /**
@@ -45,6 +47,8 @@ public class UserServlet extends HttpServlet {
         String firstName;
         String lastName;
         String email;
+        String username;
+        String password;
 
         try {
         	pGobject.setType("UUID");
@@ -56,7 +60,14 @@ public class UserServlet extends HttpServlet {
         firstName = request.getParameter("firstName");
         lastName = request.getParameter("lastName");
         email = request.getParameter("email");
-        User user = new User(id.toString(), firstName, lastName, email);
+        username = request.getParameter("username");
+        try {
+			password = PasswordStorage.createHash(request.getParameter("password"));
+		} catch (CannotPerformOperationException e) {
+			e.printStackTrace();
+			password = request.getParameter("password");
+		}
+        User user = new User(id.toString(), firstName, lastName, email, username, password);
         user.persist();
         response.getWriter().append(user.toJSONString());
 	}

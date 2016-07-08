@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import java.sql.Statement;
-import java.sql.PreparedStatement;
 
 public class DBHelper {
 	
@@ -14,8 +13,8 @@ public class DBHelper {
 	public static final String SGBD 	= "postgresql";
 	public static final String DB_HOST	= "localhost";
 	public static final String DB_NAME	= "BetSport";
-	public static final String DB_DEFAULT_USER_NAME= "root";
-	public static final String DB_DEFAULT_USER_PASSWORD= "root";
+	public static final String DB_DEFAULT_USER_NAME= "paulcouaillier";
+	public static final String DB_DEFAULT_USER_PASSWORD= "";
 	public static final String CONNECTION = "jdbc:"+SGBD+"://"+DB_HOST+"/"+DB_NAME;
 
 	public static enum TABLES {
@@ -34,7 +33,7 @@ public class DBHelper {
 				"Integer",
 				"boolean",
 				"boolean",
-				"betPoints"
+				"Integer"
 		}),
 		TABLE_MATCH("Match", new String[]{
 				"id",
@@ -42,32 +41,38 @@ public class DBHelper {
 				"teamTwo",
 				"teamOneQuote",
 				"teamTwoQuote",
-				"betLocked"
+				"betLocked",
+				"matchDate"
 		}, new String[] {
 				"UUID",
 				"UUID",
 				"UUID",
 				"Integer",
 				"Integer",
-				"boolean"
+				"boolean",
+				"date"
 		}),
 		TABLE_TEAM("Team", new String[]{
 				"id",
 				"name"
 		}, new String[] {
 				"UUID",
-				"Varchar(255)"
+				"character varying(200)"
 		}),
-		TABLE_USER("User", new String[]{
+		TABLE_USER("table_User", new String[]{
 				"id",
 				"firstName",
 				"lastName",
-				"email"
+				"email",
+				"username",
+				"password"
 		}, new String[]{
 				"UUID",
-				"Varchar(255)",
-				"Varchar(255)",
-				"Varchar(255)"
+				"character varying(200)",
+				"character varying(200)",
+				"character varying(200)",
+				"character varying(200)",
+				"character varying(255)",
 		});
 
 		public final String TABLE_NAME;
@@ -95,29 +100,44 @@ public class DBHelper {
 	 */
 	public void create() throws ClassNotFoundException, SQLException {
 		Connection connection = connect();
+		Statement statement;
         String query;
 
         for(TABLES table : TABLES.values()) {
-            query = "CREATE TABLE " + table.TABLE_NAME + "(_id";
+            query = "CREATE TABLE " + table.TABLE_NAME + "(id";
             if(table.COLUMNS_TYPE[0] != "UUID") {
-            	query = query + " integer primary key autoincrement";
+            	query = query + " Integer AUTOINCREMENT NOT NULL";
             } else {
-            	query = query + " UUID";
+            	query = query + " UUID NOT NULL";
             }
             for(int i=1; i < table.COLUMNS_NAME.length;i++) {
-                query += "," + table.COLUMNS_NAME[i] + " " + table.COLUMNS_TYPE[i] + " NOT NULL";
+                query += "," + table.COLUMNS_NAME[i] + " " + table.COLUMNS_TYPE[i];
             }
-            query += ");";
-            Statement statement = connection.createStatement();
-            statement.executeQuery(query);
+            query += ",CONSTRAINT "+table.TABLE_NAME+"_PK PRIMARY KEY (id));";
+            statement = connection.createStatement();
+            try {
+            	statement.execute(query);
+            } catch(Exception e) {
+            	System.out.println(query);
+            	e.printStackTrace();
+            }
             statement.close();
         }
-        PreparedStatement preparedStatement = connection.prepareStatement("insert into " + TABLES.TABLE_USER.TABLE_NAME + " (id, name, username, password) VALUES (null, ?, ? , ?)");
-        preparedStatement.setString(1, "root");
-        preparedStatement.setString(2, "root");
-        preparedStatement.setString(3, "root");
-        preparedStatement.execute();
-        preparedStatement.close();
-
+        statement = connection.createStatement();
+        try {
+        	statement.execute("ALTER TABLE table_user ADD CONSTRAINT username_UNIQUE UNIQUE (username);");
+        } catch(Exception e) {
+        	e.printStackTrace();
+        }
+        try {
+        	statement.close();
+        } catch(Exception e) {
+        	e.printStackTrace();
+        }
+        try {
+        	connection.close();
+        } catch(Exception e) {
+        	e.printStackTrace();
+        }
     }
 }

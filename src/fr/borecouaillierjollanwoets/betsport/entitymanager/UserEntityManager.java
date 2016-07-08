@@ -7,6 +7,9 @@ import java.sql.ResultSet;
 
 import org.postgresql.util.PGobject;
 
+import ca.defuse.PasswordStorage;
+import ca.defuse.PasswordStorage.CannotPerformOperationException;
+import ca.defuse.PasswordStorage.InvalidHashException;
 import fr.borecouaillierjollanwoets.betsport.model.User;
 import fr.paulcouaillier.tools.db.DBHelper;
 import fr.paulcouaillier.tools.db.EntityManager;
@@ -18,7 +21,17 @@ public class UserEntityManager extends EntityManager<User> {
 	}
 	
 	public User getByUsernamePassword(String username, String password) {
-		return this.getOne().where("username=\""+username.replaceAll("\\", "\\\\").replaceAll("\"", "\\\"")+"\" AND password=\""+password.replaceAll("\\", "\\\\").replaceAll("\"", "\\\"")+"\"").getFirst();
+		User user = this.getOne().where("username=\""+username.replaceAll("\\", "\\\\").replaceAll("\"", "\\\"")+"\"").getFirst();
+		try {
+			if(PasswordStorage.verifyPassword(password, user.getPassword())) {
+				return user;
+			}
+		} catch (CannotPerformOperationException e) {
+			e.printStackTrace();
+		} catch (InvalidHashException e) {
+			// @TODO WARN THE USER TO CHANGE HIS PASSWORD
+		}
+		return null; 
 	}
 	
 	/**
